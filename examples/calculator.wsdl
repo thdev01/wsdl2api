@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="Calculator"
+             targetNamespace="http://tempuri.org/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://tempuri.org/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <types>
+        <xsd:schema targetNamespace="http://tempuri.org/">
+            <xsd:element name="Add">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="intA" type="xsd:int"/>
+                        <xsd:element name="intB" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="AddResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="AddResult" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </types>
+
+    <message name="AddSoapIn">
+        <part name="parameters" element="tns:Add"/>
+    </message>
+    <message name="AddSoapOut">
+        <part name="parameters" element="tns:AddResponse"/>
+    </message>
+
+    <portType name="CalculatorSoap">
+        <operation name="Add">
+            <documentation>Adds two integers</documentation>
+            <input message="tns:AddSoapIn"/>
+            <output message="tns:AddSoapOut"/>
+        </operation>
+    </portType>
+
+    <binding name="CalculatorSoap" type="tns:CalculatorSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="Add">
+            <soap:operation soapAction="http://tempuri.org/Add" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="Calculator">
+        <port name="CalculatorSoap" binding="tns:CalculatorSoap">
+            <soap:address location="http://www.dneonline.com/calculator.asmx"/>
+        </port>
+    </service>
+</definitions>
