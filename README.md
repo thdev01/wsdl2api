@@ -16,6 +16,7 @@ Transform WSDL definitions into clean, modular Go code with automatically genera
 - 🔧 **SOAP 1.1 & 1.2**: Support for both SOAP protocol versions
 - 🎭 **Mock Server**: Generate mock SOAP servers for testing
 - 📄 **OpenAPI Export**: Convert WSDL to OpenAPI 3.0 specifications
+- 💙 **TypeScript Client**: Generate type-safe TypeScript/JavaScript clients
 - 📦 **Modular**: Clean, organized code structure
 - 🚀 **Easy to Use**: Simple CLI interface
 - 🧪 **Tested**: Pre-tested with real-world WSDLs (Correios, etc.)
@@ -53,7 +54,7 @@ wsdl2api generate --wsdl ./service.wsdl --soap-version 1.2 --output ./generated
 wsdl2api generate --wsdl ./service.wsdl --mock --output ./generated
 ```
 
-### Export to OpenAPI
+### Export to OpenAPI & TypeScript
 
 ```bash
 # Export to JSON
@@ -61,6 +62,12 @@ wsdl2api export --wsdl ./service.wsdl --format json --output ./docs
 
 # Export to YAML
 wsdl2api export --wsdl ./service.wsdl --format yaml --output ./docs
+
+# Generate TypeScript client alongside OpenAPI
+wsdl2api export --wsdl ./service.wsdl --output ./api --typescript
+
+# Custom TypeScript output directory
+wsdl2api export --wsdl ./service.wsdl --output ./api --typescript --ts-output ./client
 ```
 
 ### Start REST API Server
@@ -133,6 +140,38 @@ func main() {
 }
 ```
 
+#### Use Generated TypeScript Client:
+
+```typescript
+import { APIClient } from './typescript/client';
+import type { AddRequest, AddResponse } from './typescript/types';
+
+// Create client instance
+const client = new APIClient({
+  baseURL: 'http://your-api-url.com',
+  timeout: 30000,
+  headers: {
+    'Authorization': 'Bearer token'  // Optional
+  }
+});
+
+// Make type-safe API calls
+const request: AddRequest = {
+  parameters: 'value'
+};
+
+try {
+  const response: AddResponse = await client.add(request);
+  console.log('Response:', response);
+} catch (error) {
+  const apiError = error as APIError;
+  console.error('Error:', apiError.message);
+  if (apiError.fault) {
+    console.error('SOAP Fault:', apiError.fault);
+  }
+}
+```
+
 ### Serve REST API
 
 ```bash
@@ -158,10 +197,12 @@ Flags:
 #### Export Command
 ```
 Flags:
-  -w, --wsdl string      WSDL file path or URL (required)
-  -o, --output string    Output directory (empty for stdout)
-  -f, --format string    Export format: "json" or "yaml" (default "json")
-  -h, --help            Help for command
+  -w, --wsdl string        WSDL file path or URL (required)
+  -o, --output string      Output directory (empty for stdout)
+  -f, --format string      Export format: "json" or "yaml" (default "json")
+  --typescript             Generate TypeScript client
+  --ts-output string       TypeScript output directory (default: <output>/typescript)
+  -h, --help              Help for command
 ```
 
 #### Serve Command
@@ -188,6 +229,7 @@ wsdl2api/
 │   ├── generator/         # Code generation (client, types, operators, mock)
 │   ├── security/          # WS-Security implementation
 │   ├── exporter/          # OpenAPI/Swagger export
+│   ├── typescript/        # TypeScript client generator
 │   ├── client/            # SOAP client wrapper
 │   └── server/            # REST API server
 ├── internal/
@@ -248,10 +290,13 @@ go build -o wsdl2api ./cmd/wsdl2api
 - [x] SOAP 1.2 support
 - [x] Mock server generation for testing
 - [x] OpenAPI/Swagger 3.0 export
+- [x] TypeScript/JavaScript client generation
 - [ ] Docker container
 - [ ] Web UI
 - [ ] Advanced type validation
 - [ ] Custom headers support
+- [ ] Python client generation
+- [ ] GraphQL API generation
 
 ---
 
