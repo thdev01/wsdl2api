@@ -3,23 +3,27 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/thdev01/wsdl2api/pkg/exporter"
 	"github.com/thdev01/wsdl2api/pkg/generator"
 	"github.com/thdev01/wsdl2api/pkg/parser"
 	"github.com/thdev01/wsdl2api/pkg/server"
+	"github.com/thdev01/wsdl2api/pkg/typescript"
 )
 
 var (
-	wsdlPath      string
-	outputDir     string
-	packageName   string
-	port          int
-	host          string
-	exportFormat  string
-	generateMock  bool
-	soapVersion   string
+	wsdlPath         string
+	outputDir        string
+	packageName      string
+	port             int
+	host             string
+	exportFormat     string
+	generateMock     bool
+	soapVersion      string
+	generateTS       bool
+	tsOutputDir      string
 )
 
 var rootCmd = &cobra.Command{
@@ -146,6 +150,21 @@ var exportCmd = &cobra.Command{
 			fmt.Printf("OpenAPI spec exported to: %s\n", filename)
 		}
 
+		// Generate TypeScript client if requested
+		if generateTS {
+			tsDir := tsOutputDir
+			if tsDir == "" {
+				tsDir = filepath.Join(outputDir, "typescript")
+			}
+
+			fmt.Printf("Generating TypeScript client in: %s\n", tsDir)
+			tsGen := typescript.NewGenerator(tsDir, spec)
+			if err := tsGen.Generate(); err != nil {
+				return fmt.Errorf("failed to generate TypeScript client: %w", err)
+			}
+			fmt.Printf("TypeScript client generated successfully in: %s\n", tsDir)
+		}
+
 		return nil
 	},
 }
@@ -169,6 +188,8 @@ func init() {
 	exportCmd.Flags().StringVarP(&wsdlPath, "wsdl", "w", "", "WSDL file path or URL (required)")
 	exportCmd.Flags().StringVarP(&outputDir, "output", "o", "", "Output directory (empty for stdout)")
 	exportCmd.Flags().StringVarP(&exportFormat, "format", "f", "json", "Export format (json or yaml)")
+	exportCmd.Flags().BoolVar(&generateTS, "typescript", false, "Generate TypeScript client")
+	exportCmd.Flags().StringVar(&tsOutputDir, "ts-output", "", "TypeScript output directory (default: <output>/typescript)")
 	exportCmd.MarkFlagRequired("wsdl")
 
 	// Add commands to root
