@@ -193,7 +193,6 @@ func (m *MockServer) sendSOAPFault(w http.ResponseWriter, code, message, detail 
 	for _, portType := range def.PortTypes {
 		for _, op := range portType.Operations {
 			methodName := toPascalCase(op.Name)
-			outputMsg := g.findMessage(def, op.Output.Name)
 
 			b.WriteString(fmt.Sprintf("// Mock%s is a default mock handler for %s operation\n", methodName, op.Name))
 			b.WriteString(fmt.Sprintf("func Mock%s(request interface{}) (interface{}, error) {\n", methodName))

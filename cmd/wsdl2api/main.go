@@ -50,8 +50,14 @@ var generateCmd = &cobra.Command{
 
 		// Generate code
 		g := generator.NewGenerator(outputDir, packageName)
-		if err := g.Generate(definitions); err != nil {
-			return fmt.Errorf("failed to generate code: %w", err)
+		if generateMock {
+			if err := g.GenerateWithMock(definitions); err != nil {
+				return fmt.Errorf("failed to generate code: %w", err)
+			}
+		} else {
+			if err := g.Generate(definitions); err != nil {
+				return fmt.Errorf("failed to generate code: %w", err)
+			}
 		}
 
 		fmt.Printf("Code generated successfully in: %s\n", outputDir)
