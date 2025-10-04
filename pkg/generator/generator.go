@@ -31,8 +31,8 @@ func (g *Generator) Generate(def *models.Definitions) error {
 		return fmt.Errorf("failed to create output directory: %w", err)
 	}
 
-	// Generate improved client code
-	if err := g.generateClientImproved(def); err != nil {
+	// Generate client with WS-Security support
+	if err := g.generateClientWithSecurity(def); err != nil {
 		return fmt.Errorf("failed to generate client: %w", err)
 	}
 
@@ -49,6 +49,21 @@ func (g *Generator) Generate(def *models.Definitions) error {
 	// Generate usage example
 	if err := g.generateUsageExample(def); err != nil {
 		return fmt.Errorf("failed to generate usage example: %w", err)
+	}
+
+	return nil
+}
+
+// GenerateWithMock generates all code including mock server
+func (g *Generator) GenerateWithMock(def *models.Definitions) error {
+	// Generate all standard code
+	if err := g.Generate(def); err != nil {
+		return err
+	}
+
+	// Generate mock server
+	if err := g.generateMockServer(def); err != nil {
+		return fmt.Errorf("failed to generate mock server: %w", err)
 	}
 
 	return nil
