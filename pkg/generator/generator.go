@@ -31,19 +31,24 @@ func (g *Generator) Generate(def *models.Definitions) error {
 		return fmt.Errorf("failed to create output directory: %w", err)
 	}
 
-	// Generate client code
-	if err := g.generateClient(def); err != nil {
+	// Generate improved client code
+	if err := g.generateClientImproved(def); err != nil {
 		return fmt.Errorf("failed to generate client: %w", err)
 	}
 
-	// Generate types
-	if err := g.generateTypes(def); err != nil {
+	// Generate improved types
+	if err := g.generateTypesImproved(def); err != nil {
 		return fmt.Errorf("failed to generate types: %w", err)
 	}
 
-	// Generate operations
-	if err := g.generateOperations(def); err != nil {
-		return fmt.Errorf("failed to generate operations: %w", err)
+	// Generate operator functions
+	if err := g.generateOperatorsImproved(def); err != nil {
+		return fmt.Errorf("failed to generate operators: %w", err)
+	}
+
+	// Generate usage example
+	if err := g.generateUsageExample(def); err != nil {
+		return fmt.Errorf("failed to generate usage example: %w", err)
 	}
 
 	return nil

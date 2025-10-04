@@ -66,7 +66,7 @@ curl http://localhost:8080/api/consultaCEP -X POST -H "Content-Type: application
 
 ## Usage
 
-### Generate Code Only
+### Generate Go Client Code
 
 ```bash
 wsdl2api generate \
@@ -75,7 +75,38 @@ wsdl2api generate \
   --package <package-name>
 ```
 
-### Generate and Serve API
+#### Generated Files:
+- `client.go` - SOAP client with HTTP handling
+- `types.go` - Request/response types
+- `operators.go` - Easy-to-use functions for each operation
+- `example.go` - Usage documentation
+
+#### Use Generated Code:
+
+```go
+package main
+
+import (
+    "fmt"
+    "log"
+    "yourproject/generated/client"
+)
+
+func main() {
+    // Create client
+    client := client.NewClient("")
+
+    // Call operation with seamless API
+    result, err := client.SomeOperation(param1, param2)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Printf("Result: %+v\n", result)
+}
+```
+
+### Serve REST API
 
 ```bash
 wsdl2api serve \
@@ -95,6 +126,8 @@ Flags:
   --host string         Server host (default "localhost")
   -h, --help            Help for command
 ```
+
+📚 **[Complete Usage Guide](docs/USAGE.md)** - Advanced examples, best practices, troubleshooting
 
 ---
 
