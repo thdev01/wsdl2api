@@ -1,0 +1,174 @@
+=== RUN   TestCalculatorClientGeneration
+    calculator_test.go:33: ✓ Calculator client generated successfully
+    calculator_test.go:34:   URL: http://www.dneonline.com/calculator.asmx
+    calculator_test.go:35:   SOAP Version: 1.1
+--- PASS: TestCalculatorClientGeneration (0.00s)
+=== RUN   TestCalculatorClientMethods
+    calculator_test.go:63: ✓ Calculator client methods work correctly
+--- PASS: TestCalculatorClientMethods (0.00s)
+=== RUN   TestCalculatorTypesGeneration
+    calculator_test.go:86: ✓ Calculator types generated correctly
+    calculator_test.go:87:   AddRequest: &{XMLName:{Space: Local:} Parameters:test parameters}
+    calculator_test.go:88:   AddResponse: &{XMLName:{Space: Local:} Parameters:test response}
+--- PASS: TestCalculatorTypesGeneration (0.00s)
+=== RUN   TestCalculatorSOAPEnvelopeFormat
+=== RUN   TestCalculatorSOAPEnvelopeFormat/SOAP_1.1
+    calculator_test.go:119: ✓ SOAP 1.1 configuration correct
+=== RUN   TestCalculatorSOAPEnvelopeFormat/SOAP_1.2
+    calculator_test.go:119: ✓ SOAP 1.2 configuration correct
+--- PASS: TestCalculatorSOAPEnvelopeFormat (0.00s)
+    --- PASS: TestCalculatorSOAPEnvelopeFormat/SOAP_1.1 (0.00s)
+    --- PASS: TestCalculatorSOAPEnvelopeFormat/SOAP_1.2 (0.00s)
+=== RUN   TestCalculatorOpenAPIGeneration
+    calculator_test.go:159: ✓ OpenAPI specification generated correctly
+    calculator_test.go:160:   Version: 3.0.0
+    calculator_test.go:161:   Title: Calculator
+    calculator_test.go:162:   Paths: 1
+--- PASS: TestCalculatorOpenAPIGeneration (0.01s)
+=== RUN   TestCalculatorClientHTTPHeaders
+    calculator_test.go:181: ✓ Custom HTTP headers work correctly
+    calculator_test.go:182:   Headers: map[Authorization:Bearer token123 X-Custom-Header:test-value]
+--- PASS: TestCalculatorClientHTTPHeaders (0.00s)
+=== RUN   TestCalculatorSecurityHeaders
+    calculator_test.go:215: ✓ WS-Security headers configured correctly
+    calculator_test.go:216:   Username: admin
+    calculator_test.go:217:   UseDigest: true
+--- PASS: TestCalculatorSecurityHeaders (0.00s)
+=== RUN   TestCalculatorClientTimeout
+    calculator_test.go:245: ✓ HTTP client timeout configured correctly
+    calculator_test.go:246:   Timeout: 1s
+--- PASS: TestCalculatorClientTimeout (0.00s)
+=== RUN   TestCalculatorJSONSerialization
+    calculator_test.go:274: ✓ JSON serialization works correctly
+    calculator_test.go:275:   JSON: {"XMLName":{"Space":"","Local":""},"Parameters":"test value"}
+--- PASS: TestCalculatorJSONSerialization (0.00s)
+=== RUN   TestNumberConversionClientGeneration
+    numberconversion_test.go:21: ✓ Number Conversion client generated successfully
+    numberconversion_test.go:22:   URL: https://www.dataaccess.com/webservicesserver/numberconversion.wso
+--- PASS: TestNumberConversionClientGeneration (0.00s)
+=== RUN   TestNumberConversionOperations
+    numberconversion_test.go:45: ✓ Number Conversion operations generated correctly
+    numberconversion_test.go:46:   Operations: NumberToWords, NumberToDollars
+--- PASS: TestNumberConversionOperations (0.00s)
+=== RUN   TestNumberConversionTypeSafety
+    numberconversion_test.go:60: ✓ Type safety working correctly
+    numberconversion_test.go:61:   NumberToWordsRequest.UbiNum: 456
+    numberconversion_test.go:62:   NumberToDollarsRequest.DNum: 789
+--- PASS: TestNumberConversionTypeSafety (0.00s)
+=== RUN   TestNumberConversionClientConfiguration
+    numberconversion_test.go:85: ✓ Number Conversion client configuration works
+    numberconversion_test.go:86:   Custom URL: http://custom-url.com
+    numberconversion_test.go:87:   SOAP Version: 1.2
+    numberconversion_test.go:88:   Auth User: user
+--- PASS: TestNumberConversionClientConfiguration (0.00s)
+=== RUN   TestFullPipelineCalculator
+    pipeline_test.go:12: Testing complete pipeline for Calculator service
+=== RUN   TestFullPipelineCalculator/Go_Client_Generated
+    pipeline_test.go:28:   ✓ Found: client.go
+    pipeline_test.go:28:   ✓ Found: types.go
+    pipeline_test.go:26: Expected file not found: calculator/client/operators.go
+    pipeline_test.go:28:   ✓ Found: example.go
+    pipeline_test.go:26: Expected file not found: calculator/client/mock_server.go
+=== RUN   TestFullPipelineCalculator/OpenAPI_Spec_Generated
+    pipeline_test.go:51:   ✓ OpenAPI Version: 3.0.0
+    pipeline_test.go:52:   ✓ API Title: Calculator
+    pipeline_test.go:61:   ✓ Path: /api/Add
+=== RUN   TestFullPipelineCalculator/TypeScript_Client_Generated
+    pipeline_test.go:80:   ✓ Found: types.ts
+    pipeline_test.go:80:   ✓ Found: client.ts
+    pipeline_test.go:80:   ✓ Found: index.ts
+    pipeline_test.go:80:   ✓ Found: package.json
+    pipeline_test.go:80:   ✓ Found: tsconfig.json
+    pipeline_test.go:80:   ✓ Found: README.md
+    pipeline_test.go:104:   ✓ TypeScript types contain all expected interfaces
+    pipeline_test.go:125:   ✓ TypeScript client contains all expected methods
+=== RUN   TestFullPipelineCalculator/TypeScript_Package_Configuration
+    pipeline_test.go:153:   ✓ Package name: calculator-client
+    pipeline_test.go:154:   ✓ Package version: 1.0.0
+    pipeline_test.go:155:   ✓ Scripts: 2
+=== NAME  TestFullPipelineCalculator
+    pipeline_test.go:158: ✅ Complete pipeline test PASSED for Calculator service
+--- FAIL: TestFullPipelineCalculator (0.02s)
+    --- FAIL: TestFullPipelineCalculator/Go_Client_Generated (0.01s)
+    --- PASS: TestFullPipelineCalculator/OpenAPI_Spec_Generated (0.00s)
+    --- PASS: TestFullPipelineCalculator/TypeScript_Client_Generated (0.01s)
+    --- PASS: TestFullPipelineCalculator/TypeScript_Package_Configuration (0.00s)
+=== RUN   TestFullPipelineNumberConversion
+    pipeline_test.go:163: Testing complete pipeline for NumberConversion service
+    pipeline_test.go:197: Missing Go file: numberconversion/client/operators.go
+    pipeline_test.go:197: Missing Go file: numberconversion/client/mock_server.go
+    pipeline_test.go:214:   ✓ OpenAPI paths: 2
+    pipeline_test.go:170: ✅ Complete pipeline test PASSED for NumberConversion service
+--- FAIL: TestFullPipelineNumberConversion (0.01s)
+=== RUN   TestFullPipelineTemperature
+    pipeline_test.go:175: Testing complete pipeline for Temperature service
+    pipeline_test.go:197: Missing Go file: temperature/client/operators.go
+    pipeline_test.go:197: Missing Go file: temperature/client/mock_server.go
+    pipeline_test.go:214:   ✓ OpenAPI paths: 4
+    pipeline_test.go:182: ✅ Complete pipeline test PASSED for Temperature service
+--- FAIL: TestFullPipelineTemperature (0.01s)
+=== RUN   TestCodeQuality
+=== RUN   TestCodeQuality/calculator
+    pipeline_test.go:266:   ✓ Code quality checks passed for calculator
+=== RUN   TestCodeQuality/numberconversion
+    pipeline_test.go:266:   ✓ Code quality checks passed for numberconversion
+=== RUN   TestCodeQuality/temperature
+    pipeline_test.go:266:   ✓ Code quality checks passed for temperature
+--- PASS: TestCodeQuality (0.01s)
+    --- PASS: TestCodeQuality/calculator (0.00s)
+    --- PASS: TestCodeQuality/numberconversion (0.00s)
+    --- PASS: TestCodeQuality/temperature (0.00s)
+=== RUN   TestGeneratedCodeSize
+=== RUN   TestGeneratedCodeSize/calculator
+    pipeline_test.go:293:   ✓ client.go size: 5500 bytes
+=== RUN   TestGeneratedCodeSize/numberconversion
+    pipeline_test.go:293:   ✓ client.go size: 5531 bytes
+=== RUN   TestGeneratedCodeSize/temperature
+    pipeline_test.go:293:   ✓ client.go size: 5530 bytes
+--- PASS: TestGeneratedCodeSize (0.00s)
+    --- PASS: TestGeneratedCodeSize/calculator (0.00s)
+    --- PASS: TestGeneratedCodeSize/numberconversion (0.00s)
+    --- PASS: TestGeneratedCodeSize/temperature (0.00s)
+=== RUN   TestTypeScriptTypeSafety
+=== RUN   TestTypeScriptTypeSafety/calculator
+    pipeline_test.go:327:   ✓ TypeScript types are properly defined
+=== RUN   TestTypeScriptTypeSafety/numberconversion
+    pipeline_test.go:327:   ✓ TypeScript types are properly defined
+=== RUN   TestTypeScriptTypeSafety/temperature
+    pipeline_test.go:327:   ✓ TypeScript types are properly defined
+--- PASS: TestTypeScriptTypeSafety (0.01s)
+    --- PASS: TestTypeScriptTypeSafety/calculator (0.00s)
+    --- PASS: TestTypeScriptTypeSafety/numberconversion (0.00s)
+    --- PASS: TestTypeScriptTypeSafety/temperature (0.00s)
+=== RUN   TestTemperatureClientGeneration
+    temperature_test.go:21: ✓ Temperature client generated successfully
+    temperature_test.go:22:   Default URL: http://webservices.daehosting.com/services/TemperatureConversions.wso
+    temperature_test.go:23:   SOAP Version: 1.1
+--- PASS: TestTemperatureClientGeneration (0.00s)
+=== RUN   TestTemperatureOperations
+    temperature_test.go:46: ✓ Temperature operations generated correctly
+    temperature_test.go:47:   CelsiusToFahrenheit: &{XMLName:{Space: Local:} NCelsius:25}
+    temperature_test.go:48:   FahrenheitToCelsius: &{XMLName:{Space: Local:} NFahrenheit:77}
+--- PASS: TestTemperatureOperations (0.00s)
+=== RUN   TestTemperatureResponseTypes
+    temperature_test.go:71: ✓ Temperature response types work correctly
+--- PASS: TestTemperatureResponseTypes (0.00s)
+=== RUN   TestTemperatureMultipleConversions
+=== RUN   TestTemperatureMultipleConversions/Freezing_point
+    temperature_test.go:97:   Freezing point: 0°C expected to be 32°F
+=== RUN   TestTemperatureMultipleConversions/Boiling_point
+    temperature_test.go:97:   Boiling point: 100°C expected to be 212°F
+=== RUN   TestTemperatureMultipleConversions/Room_temperature
+    temperature_test.go:97:   Room temperature: 25°C expected to be 77°F
+=== RUN   TestTemperatureMultipleConversions/Same_value_in_both_scales
+    temperature_test.go:97:   Same value in both scales: -40°C expected to be -40°F
+=== NAME  TestTemperatureMultipleConversions
+    temperature_test.go:101: ✓ Multiple temperature conversions handled correctly
+--- PASS: TestTemperatureMultipleConversions (0.00s)
+    --- PASS: TestTemperatureMultipleConversions/Freezing_point (0.00s)
+    --- PASS: TestTemperatureMultipleConversions/Boiling_point (0.00s)
+    --- PASS: TestTemperatureMultipleConversions/Room_temperature (0.00s)
+    --- PASS: TestTemperatureMultipleConversions/Same_value_in_both_scales (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/thdev01/wsdl2api/tests/integration	0.074s

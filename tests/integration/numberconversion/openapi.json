@@ -1,0 +1,143 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "NumberConversion",
+    "description": "API converted from WSDL: http://www.dataaccess.com/webservicesserver/",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://www.dataaccess.com/webservicesserver/numberconversion.wso",
+      "description": "NumberConversion - NumberConversionSoap"
+    },
+    {
+      "url": "https://www.dataaccess.com/webservicesserver/numberconversion.wso",
+      "description": "NumberConversion - NumberConversionSoap12"
+    }
+  ],
+  "paths": {
+    "/api/NumberToDollars": {
+      "post": {
+        "summary": "NumberToDollars",
+        "description": "Returns the non-zero dollar amount of the passed number.",
+        "operationId": "NumberToDollars",
+        "requestBody": {
+          "description": "Request for NumberToDollars operation",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parameters": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response for NumberToDollars",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parameters": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "SOAP Fault",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    },
+                    "faultcode": {
+                      "type": "string"
+                    },
+                    "faultstring": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/NumberToWords": {
+      "post": {
+        "summary": "NumberToWords",
+        "description": "Returns the word corresponding to the positive number passed as parameter. Limited to quadrillions.",
+        "operationId": "NumberToWords",
+        "requestBody": {
+          "description": "Request for NumberToWords operation",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parameters": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response for NumberToWords",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parameters": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "SOAP Fault",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    },
+                    "faultcode": {
+                      "type": "string"
+                    },
+                    "faultstring": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {}
+}

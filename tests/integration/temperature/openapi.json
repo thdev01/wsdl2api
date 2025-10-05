@@ -1,0 +1,265 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "TemperatureConversions",
+    "description": "API converted from WSDL: http://webservices.daehosting.com/temperature",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://webservices.daehosting.com/services/TemperatureConversions.wso",
+      "description": "TemperatureConversions - TemperatureConversionsSoap"
+    },
+    {
+      "url": "http://webservices.daehosting.com/services/TemperatureConversions.wso",
+      "description": "TemperatureConversions - TemperatureConversionsSoap12"
+    }
+  ],
+  "paths": {
+    "/api/CelsiusToFahrenheit": {
+      "post": {
+        "summary": "CelsiusToFahrenheit",
+        "description": "Converts a Celsius Temperature to a Fahrenheit value",
+        "operationId": "CelsiusToFahrenheit",
+        "requestBody": {
+          "description": "Request for CelsiusToFahrenheit operation",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parameters": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response for CelsiusToFahrenheit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parameters": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "SOAP Fault",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    },
+                    "faultcode": {
+                      "type": "string"
+                    },
+                    "faultstring": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/FahrenheitToCelsius": {
+      "post": {
+        "summary": "FahrenheitToCelsius",
+        "description": "Converts a Fahrenheit Temperature to a Celsius value",
+        "operationId": "FahrenheitToCelsius",
+        "requestBody": {
+          "description": "Request for FahrenheitToCelsius operation",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parameters": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response for FahrenheitToCelsius",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parameters": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "SOAP Fault",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    },
+                    "faultcode": {
+                      "type": "string"
+                    },
+                    "faultstring": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/WindChillInCelsius": {
+      "post": {
+        "summary": "WindChillInCelsius",
+        "description": "Windchill temperature calculated with the formula of Steadman",
+        "operationId": "WindChillInCelsius",
+        "requestBody": {
+          "description": "Request for WindChillInCelsius operation",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parameters": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response for WindChillInCelsius",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parameters": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "SOAP Fault",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    },
+                    "faultcode": {
+                      "type": "string"
+                    },
+                    "faultstring": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/WindChillInFahrenheit": {
+      "post": {
+        "summary": "WindChillInFahrenheit",
+        "description": "Windchill temperature calculated with the formula of Steadman",
+        "operationId": "WindChillInFahrenheit",
+        "requestBody": {
+          "description": "Request for WindChillInFahrenheit operation",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parameters": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response for WindChillInFahrenheit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parameters": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "SOAP Fault",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    },
+                    "faultcode": {
+                      "type": "string"
+                    },
+                    "faultstring": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {}
+}

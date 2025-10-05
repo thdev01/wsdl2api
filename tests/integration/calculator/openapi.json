@@ -1,0 +1,78 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Calculator",
+    "description": "API converted from WSDL: http://tempuri.org/",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://www.dneonline.com/calculator.asmx",
+      "description": "Calculator - CalculatorSoap"
+    }
+  ],
+  "paths": {
+    "/api/Add": {
+      "post": {
+        "summary": "Add",
+        "description": "Adds two integers",
+        "operationId": "Add",
+        "requestBody": {
+          "description": "Request for Add operation",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parameters": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response for Add",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "parameters": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "SOAP Fault",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    },
+                    "faultcode": {
+                      "type": "string"
+                    },
+                    "faultstring": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {}
+}
