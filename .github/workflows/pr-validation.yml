@@ -1,0 +1,167 @@
+name: PR Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate-pr:
+    name: Validate Pull Request
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Validate PR title
+      uses: amannn/action-semantic-pull-request@v5
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        types: |
+          feat
+          fix
+          docs
+          style
+          refactor
+          perf
+          test
+          build
+          ci
+          chore
+          revert
+
+    - name: Check for merge conflicts
+      run: |
+        git fetch origin ${{ github.base_ref }}
+        if git merge-base --is-ancestor origin/${{ github.base_ref }} HEAD; then
+          echo "No merge conflicts detected"
+        else
+          echo "Checking for merge conflicts..."
+          git merge --no-commit --no-ff origin/${{ github.base_ref }} || {
+            echo "Merge conflicts detected!"
+            git merge --abort
+            exit 1
+          }
+          git merge --abort
+        fi
+
+    - name: Check file size
+      run: |
+        # Check for files larger than 5MB
+        LARGE_FILES=$(find . -type f -size +5M -not -path "./.git/*" -not -path "./vendor/*")
+        if [ -n "$LARGE_FILES" ]; then
+          echo "Large files detected:"
+          echo "$LARGE_FILES"
+          echo "Please reduce file sizes or use Git LFS"
+          exit 1
+        fi
+
+    - name: Verify no secrets in code
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
+        base: ${{ github.event.pull_request.base.sha }}
+        head: ${{ github.event.pull_request.head.sha }}
+
+  test-coverage:
+    name: Test Coverage Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.22'
+
+    - name: Run tests with coverage
+      run: go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+
+    - name: Check coverage
+      run: |
+        COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
+        echo "Total coverage: $COVERAGE%"
+
+        # Store coverage for comparison
+        echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+
+    - name: Comment coverage on PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const coverage = process.env.COVERAGE;
+          const comment = `## Test Coverage Report\n\n**Total Coverage:** ${coverage}%\n\n`;
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment + (coverage < 50 ? '⚠️ Coverage is below 50%' : '✅ Coverage looks good!')
+          });
+
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.22'
+
+    - name: Run gofmt
+      run: |
+        UNFORMATTED=$(gofmt -l .)
+        if [ -n "$UNFORMATTED" ]; then
+          echo "The following files are not formatted:"
+          echo "$UNFORMATTED"
+          exit 1
+        fi
+
+    - name: Run go vet
+      run: go vet ./...
+
+    - name: Check for TODO comments
+      run: |
+        TODOS=$(grep -r "TODO" --include="*.go" . || true)
+        if [ -n "$TODOS" ]; then
+          echo "Found TODO comments:"
+          echo "$TODOS"
+          echo ""
+          echo "Please create issues for TODOs or remove them before merging"
+        fi
+
+  changelog-check:
+    name: Changelog Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Check if CHANGELOG updated
+      run: |
+        # Skip changelog check for documentation-only changes
+        CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+
+        if echo "$CHANGED_FILES" | grep -qvE '^(docs/|README\.md|\.github/)'; then
+          if ! echo "$CHANGED_FILES" | grep -q "CHANGELOG"; then
+            echo "⚠️ No CHANGELOG update detected for code changes"
+            echo "Please update CHANGELOG.md with your changes"
+            # Don't fail, just warn
+          else
+            echo "✅ CHANGELOG updated"
+          fi
+        else
+          echo "Documentation-only changes, skipping changelog check"
+        fi
