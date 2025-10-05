@@ -2,7 +2,6 @@ package server
 
 import (
 	"bytes"
-	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -239,17 +238,11 @@ func (s *Server) callSOAP(operation, soapAction string, requestParams map[string
 		return nil, fmt.Errorf("SOAP endpoint not configured")
 	}
 
-	// Build SOAP envelope
-	envelope := s.buildSOAPEnvelope(operation, requestParams)
-
-	// Marshal to XML
-	xmlData, err := xml.MarshalIndent(envelope, "", "  ")
-	if err != nil {
-		return nil, fmt.Errorf("failed to marshal SOAP request: %w", err)
-	}
+	// Build SOAP envelope (returns XML string)
+	xmlData := s.buildSOAPEnvelope(operation, requestParams)
 
 	// Create HTTP request
-	req, err := http.NewRequest("POST", s.soapEndpoint, bytes.NewBuffer([]byte(xml.Header+string(xmlData))))
+	req, err := http.NewRequest("POST", s.soapEndpoint, bytes.NewBuffer([]byte(xmlData)))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
@@ -288,57 +281,35 @@ func (s *Server) callSOAP(operation, soapAction string, requestParams map[string
 }
 
 // buildSOAPEnvelope builds a SOAP envelope for the request
-func (s *Server) buildSOAPEnvelope(operation string, params map[string]interface{}) interface{} {
-	// Convert params map to XML-friendly structure
-	paramsXML := make(map[string]string)
+func (s *Server) buildSOAPEnvelope(operation string, params map[string]interface{}) string {
+	// Build parameter XML elements
+	var paramsXML strings.Builder
 	for k, v := range params {
-		paramsXML[k] = fmt.Sprintf("%v", v)
+		paramsXML.WriteString(fmt.Sprintf("<%s>%v</%s>", k, v, k))
+	}
+
+	// Get target namespace from definitions
+	targetNS := s.definitions.TargetNamespace
+	if targetNS == "" {
+		targetNS = "http://tempuri.org/"
 	}
 
 	if s.soapVersion == "1.2" {
-		type soap12Body struct {
-			XMLName   xml.Name               `xml:"soap12:Body"`
-			Operation map[string]interface{} `xml:",any"`
-		}
-
-		return struct {
-			XMLName xml.Name   `xml:"soap12:Envelope"`
-			Soap12  string     `xml:"xmlns:soap12,attr"`
-			Body    soap12Body `xml:"soap12:Body"`
-		}{
-			Soap12: "http://www.w3.org/2003/05/soap-envelope",
-			Body: soap12Body{
-				Operation: params,
-			},
-		}
+		return fmt.Sprintf(`<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="%s">
+  <soap12:Body>
+    <tns:%s>%s</tns:%s>
+  </soap12:Body>
+</soap12:Envelope>`, targetNS, operation, paramsXML.String(), operation)
 	}
 
 	// SOAP 1.1
-	type operationRequest struct {
-		XMLName xml.Name
-		Params  map[string]interface{} `xml:",any"`
-	}
-
-	type soap11Body struct {
-		XMLName   xml.Name         `xml:"soap:Body"`
-		Operation operationRequest `xml:",any"`
-	}
-
-	opRequest := operationRequest{
-		XMLName: xml.Name{Local: operation},
-		Params:  params,
-	}
-
-	return struct {
-		XMLName xml.Name   `xml:"soap:Envelope"`
-		Soap    string     `xml:"xmlns:soap,attr"`
-		Body    soap11Body `xml:"soap:Body"`
-	}{
-		Soap: "http://schemas.xmlsoap.org/soap/envelope/",
-		Body: soap11Body{
-			Operation: opRequest,
-		},
-	}
+	return fmt.Sprintf(`<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="%s">
+  <soap:Body>
+    <tns:%s>%s</tns:%s>
+  </soap:Body>
+</soap:Envelope>`, targetNS, operation, paramsXML.String(), operation)
 }
 
 // parseSOAPResponse parses a SOAP response and extracts the result
