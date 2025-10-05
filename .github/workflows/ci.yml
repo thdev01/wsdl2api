@@ -44,6 +44,7 @@ jobs:
       run: go vet ./...
 
     - name: Run tests
+      shell: bash
       run: go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
 
     - name: Upload coverage to Codecov
@@ -150,6 +151,7 @@ jobs:
         args: '-no-fail -fmt sarif -out results.sarif ./...'
 
     - name: Upload SARIF file
+      continue-on-error: true
       uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: results.sarif

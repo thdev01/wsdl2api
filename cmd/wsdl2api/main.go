@@ -176,13 +176,13 @@ func init() {
 	generateCmd.Flags().StringVarP(&packageName, "package", "p", "client", "Go package name")
 	generateCmd.Flags().BoolVar(&generateMock, "mock", false, "Generate mock server")
 	generateCmd.Flags().StringVar(&soapVersion, "soap-version", "1.1", "SOAP version (1.1 or 1.2)")
-	generateCmd.MarkFlagRequired("wsdl")
+	_ = generateCmd.MarkFlagRequired("wsdl")
 
 	// Serve command flags
 	serveCmd.Flags().StringVarP(&wsdlPath, "wsdl", "w", "", "WSDL file path or URL (required)")
 	serveCmd.Flags().IntVar(&port, "port", 8080, "Server port")
 	serveCmd.Flags().StringVar(&host, "host", "localhost", "Server host")
-	serveCmd.MarkFlagRequired("wsdl")
+	_ = serveCmd.MarkFlagRequired("wsdl")
 
 	// Export command flags
 	exportCmd.Flags().StringVarP(&wsdlPath, "wsdl", "w", "", "WSDL file path or URL (required)")
@@ -190,7 +190,7 @@ func init() {
 	exportCmd.Flags().StringVarP(&exportFormat, "format", "f", "json", "Export format (json or yaml)")
 	exportCmd.Flags().BoolVar(&generateTS, "typescript", false, "Generate TypeScript client")
 	exportCmd.Flags().StringVar(&tsOutputDir, "ts-output", "", "TypeScript output directory (default: <output>/typescript)")
-	exportCmd.MarkFlagRequired("wsdl")
+	_ = exportCmd.MarkFlagRequired("wsdl")
 
 	// Add commands to root
 	rootCmd.AddCommand(generateCmd)

@@ -124,7 +124,7 @@ func createUsernameToken(ws *WSSecurity) *UsernameToken {
 // generateNonce generates a random nonce
 func generateNonce() []byte {
 	nonce := make([]byte, 16)
-	rand.Read(nonce)
+	_, _ = rand.Read(nonce) // crypto/rand.Read always succeeds or panics
 	return nonce
 }
 

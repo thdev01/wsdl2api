@@ -70,6 +70,8 @@ func (g *Generator) GenerateWithMock(def *models.Definitions) error {
 }
 
 // generateClient generates the SOAP client code
+//
+//nolint:unused // Legacy function kept for reference
 func (g *Generator) generateClient(def *models.Definitions) error {
 	tmpl := `package {{.PackageName}}
 
@@ -169,6 +171,8 @@ type SOAPBody struct {
 }
 
 // generateTypes generates Go structs for WSDL types
+//
+//nolint:unused // Legacy function kept for reference
 func (g *Generator) generateTypes(def *models.Definitions) error {
 	var b strings.Builder
 
@@ -195,6 +199,8 @@ func (g *Generator) generateTypes(def *models.Definitions) error {
 }
 
 // generateOperations generates operation methods
+//
+//nolint:unused // Legacy function kept for reference
 func (g *Generator) generateOperations(def *models.Definitions) error {
 	var b strings.Builder
 
